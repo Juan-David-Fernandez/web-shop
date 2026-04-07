@@ -1,0 +1,72 @@
+---
+/**
+ * Product Detail Page - Individual product page with gallery and related products
+ */
+import Layout from '../../layouts/Layout.astro'
+import ProductDetail from '../../components/catalog/ProductDetail.astro'
+
+interface Props {
+  product: any
+  relatedProducts: any[]
+}
+
+// Import catalog data at build time
+import catalogData from '../../../public/data/catalog.json'
+
+export function getStaticPaths() {
+  const products = catalogData as any[]
+  
+  return products.map(product => ({
+    params: { slug: product.slug },
+    props: { 
+      product,
+      relatedProducts: products
+        .filter(p => p.category === product.category && p.id !== product.id)
+        .slice(0, 3)
+    }
+  }))
+}
+
+const { product, relatedProducts } = Astro.props
+
+const title = `${product.name} | La Salumeria Silvio`
+const description = product.description
+
+// Schema.org structured data for product
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": product.name,
+  "description": product.description,
+  "category": product.category,
+  ...(product.price && {
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": "EUR",
+      "availability": product.inStock !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  })
+}
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  <div class="product-page">
+    <ProductDetail product={product} relatedProducts={relatedProducts} />
+  </div>
+</Layout>
+
+<style>
+  .product-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+  }
+
+  @media (min-width: 768px) {
+    .product-page {
+      padding: var(--spacing-2xl);
+    }
+  }
+</style>

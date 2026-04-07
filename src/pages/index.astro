@@ -1,0 +1,352 @@
+---
+/**
+ * Home Page - Welcome to La Salumeria Silvio
+ */
+import Layout from '../layouts/Layout.astro'
+import NewsletterForm from '../components/newsletter/NewsletterForm.astro'
+
+const title = 'La Salumeria Silvio | Specialità Gastronomiche dal 1963'
+const description = ' scopri le nostre specialità: salumi DOP, formaggi artigianali e prodotti gastronomici tradizionali. Qualità e tradizione dal 1963.'
+
+// Schema.org for local business
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "FoodStore",
+  "name": "La Salumeria Silvio",
+  "description": "Specialità gastronomiche italiane dal 1963. Salumi DOP, formaggi artigianali e prodotti tradizionali.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bergamo",
+    "addressCountry": "IT"
+  },
+  "priceRange": "€€",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "08:00",
+      "closes": "19:00"
+    }
+  ]
+}
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  <div class="home-page">
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">La Salumeria Silvio</h1>
+        <p class="hero-subtitle">Specialità gastronomic dal 1963</p>
+        <p class="hero-description">
+          Dal 1963 portiamo sulla vostra tavola i migliori salumi, formaggi e specialità gastronomiche italiane. 
+          Tradizione, qualità e passione in ogni prodotto.
+        </p>
+        <div class="hero-actions">
+          <a href="/catalog" class="cta-primary">Esplora il Catalogo</a>
+          <a href="/storia" class="cta-secondary">La Nostra Storia</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="placeholder-image">
+          <span>La Salumeria Silvio</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Qualità Certificata</h3>
+        <p class="feature-description">Prodotti DOP e IGP garantiti</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Tradizione dal 1963</h3>
+        <p class="feature-description">Oltre 60 anni di esperienza</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Servizio Personalizzato</h3>
+        <p class="feature-description">Consigli e assistenza</p>
+      </div>
+    </section>
+
+    <section class="categories-preview">
+      <h2 class="section-title">Le Nostre Specialità</h2>
+      <div class="category-grid">
+        <a href="/catalog/gastronomia" class="category-card">
+          <div class="category-image" style="background-color: #22C55E;">
+            <span>Gastronomia</span>
+          </div>
+          <h3 class="category-name">Gastronomia</h3>
+          <p class="category-description">Formaggi e latticini artigianali</p>
+        </a>
+        <a href="/catalog/salumeria" class="category-card">
+          <div class="category-image" style="background-color: #EF4444;">
+            <span>Salumeria</span>
+          </div>
+          <h3 class="category-name">Salumeria</h3>
+          <p class="category-description">Salumi e affettati pregiati</p>
+        </a>
+        <a href="/catalog/rosticceria" class="category-card">
+          <div class="category-image" style="background-color: #F59E0B;">
+            <span>Rosticceria</span>
+          </div>
+          <h3 class="category-name">Rosticceria</h3>
+          <p class="category-description">Arrosti e specialità cotte</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="newsletter-home">
+      <NewsletterForm />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .home-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+  }
+
+  /* Hero Section */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-2xl) 0;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .hero-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: var(--text-5xl);
+    }
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-secondary);
+    font-size: var(--text-xl);
+    color: var(--color-brown);
+    margin: 0;
+  }
+
+  .hero-description {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .cta-primary {
+    background: var(--color-brown);
+    color: var(--color-white);
+  }
+
+  .cta-primary:hover {
+    background: var(--color-brown-dark);
+  }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--color-brown);
+    border: 2px solid var(--color-brown);
+  }
+
+  .cta-secondary:hover {
+    background: var(--color-brown);
+    color: var(--color-white);
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .hero-image {
+      display: block;
+    }
+  }
+
+  .placeholder-image {
+    aspect-ratio: 4 / 3;
+    background: var(--color-cream);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-gray-300);
+  }
+
+  .placeholder-image span {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    color: var(--color-gray-400);
+  }
+
+  /* Features Section */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    padding: var(--spacing-3xl) 0;
+    border-top: 1px solid var(--color-gray-200);
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .feature {
+    text-align: center;
+    padding: var(--spacing-lg);
+  }
+
+  .feature-icon {
+    color: var(--color-brown);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .feature-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .feature-description {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  /* Categories Preview */
+  .categories-preview {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .section-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    text-align: center;
+    margin: 0 0 var(--spacing-2xl) 0;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .category-image {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .category-image span {
+    font-family: var(--font-primary);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-white);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .category-name {
+    font-family: var(--font-primary);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: var(--spacing-md) var(--spacing-md) var(--spacing-xs) 0;
+  }
+
+  .category-description {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0 var(--spacing-md) var(--spacing-md) 0;
+  }
+
+  /* Newsletter */
+  .newsletter-home {
+    padding: var(--spacing-3xl) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+</style>

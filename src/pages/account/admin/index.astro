@@ -1,0 +1,184 @@
+---
+/**
+ * Admin Dashboard - Leads management panel with auth check
+ */
+import Layout from '../../layouts/Layout.astro'
+import LeadsTable from '../../components/admin/LeadsTable.astro'
+---
+
+<Layout title="Area Amministrativa - La Salumeria Silvio">
+  <div class="admin-page">
+    <header class="admin-header">
+      <div class="header-content">
+        <h1 class="page-title">Gestione Iscritti</h1>
+        <button id="logout-button" class="logout-button">
+          Esci
+        </button>
+      </div>
+    </header>
+    
+    <main class="admin-content">
+      <div class="auth-check" id="auth-check">
+        <div class="loading-container">
+          <div class="loading-spinner"></div>
+          <p>Verifica autenticazione...</p>
+        </div>
+      </div>
+      
+      <div class="unauthorized" id="unauthorized" style="display: none;">
+        <h2>Accesso non autorizzato</h2>
+        <p>Devi effettuare l'accesso per visualizzare questa pagina.</p>
+        <a href="/account/login" class="login-link">Accedi</a>
+      </div>
+      
+      <div class="dashboard-content" id="dashboard-content" style="display: none;">
+        <LeadsTable />
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .admin-page {
+    min-height: 100vh;
+    background: var(--color-gray-50);
+  }
+
+  .admin-header {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .logout-button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gray-700);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .logout-button:hover {
+    background: var(--color-gray-100);
+    border-color: var(--color-gray-400);
+  }
+
+  .admin-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+  }
+
+  .loading-container,
+  .unauthorized {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: var(--spacing-md);
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-brown);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-container p,
+  .unauthorized p {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .unauthorized h2 {
+    font-family: var(--font-primary);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .login-link {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-brown);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition: background var(--transition-fast);
+  }
+
+  .login-link:hover {
+    background: var(--color-brown-dark);
+  }
+</style>
+
+<script>
+  import { logout, isAuthenticated, initAuth } from '../../stores/authStore'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize auth
+    initAuth()
+    
+    const authCheck = document.getElementById('auth-check')
+    const unauthorized = document.getElementById('unauthorized')
+    const dashboardContent = document.getElementById('dashboard-content')
+    const logoutButton = document.getElementById('logout-button')
+    
+    // Check authentication
+    const isAuth = isAuthenticated()
+    
+    if (authCheck) authCheck.style.display = 'none'
+    
+    if (isAuth) {
+      if (unauthorized) unauthorized.style.display = 'none'
+      if (dashboardContent) dashboardContent.style.display = 'block'
+    } else {
+      if (unauthorized) unauthorized.style.display = 'flex'
+      if (dashboardContent) dashboardContent.style.display = 'none'
+      // Redirect to login after a delay
+      setTimeout(() => {
+        window.location.href = '/account/login'
+      }, 2000)
+    }
+    
+    // Logout handler
+    logoutButton?.addEventListener('click', () => {
+      logout()
+      window.location.href = '/account/login'
+    })
+  })
+</script>

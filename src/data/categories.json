@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Tutti",
+    "slug": "tutti",
+    "description": "Tutti i prodotti"
+  },
+  {
+    "id": "2",
+    "name": "Gastronomia",
+    "slug": "gastronomia",
+    "description": "Formaggi e prodotti freschi"
+  },
+  {
+    "id": "3",
+    "name": "Salumeria",
+    "slug": "salumeria",
+    "description": "Salumi e affettati artigianali"
+  },
+  {
+    "id": "4",
+    "name": "Rosticceria",
+    "slug": "rosticceria",
+    "description": "Piatti pronti e arrosti"
+  }
+]

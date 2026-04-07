@@ -2,83 +2,83 @@
 
 ## Phase 1: Foundation / Infrastructure
 
-- [ ] 1.1 Create Product type interface in src/types/catalog.ts matching spec requirements
-- [ ] 1.2 Create Lead type interface in src/types/auth.ts matching spec requirements
-- [ ] 1.3 Create TimelineEvent and VintagePhoto interfaces in src/types/history.ts
-- [ ] 1.4 Set up Nano Store for catalog state in src/stores/catalogStore.ts with loadCatalog function
-- [ ] 1.5 Set up Nano Store for leads state in src/stores/leadsStore.ts with CRUD operations
-- [ ] 1.6 Create placeholder Image component src/shared/ImagePlaceholder.astro per technical design
-- [ ] 1.7 Set up basic CSS Modules structure with variables and breakpoints per technical design
-- [ ] 1.8 Create mock data files: src/data/catalog.json and src/data/categories.json
-- [ ] 1.9 Set up API route handlers for newsletter endpoints in src/pages/api/newsletter/
-- [ ] 1.10 Set up API route handlers for admin leads endpoints in src/pages/api/admin/leads/
+- [x] 1.1 Create Product type interface in src/types/catalog.ts matching spec requirements
+- [x] 1.2 Create Lead type interface in src/types/auth.ts matching spec requirements
+- [x] 1.3 Create TimelineEvent and VintagePhoto interfaces in src/types/history.ts
+- [x] 1.4 Set up Nano Store for catalog state in src/stores/catalogStore.ts with loadCatalog function
+- [x] 1.5 Set up Nano Store for leads state in src/stores/leadsStore.ts with CRUD operations
+- [x] 1.6 Create placeholder Image component src/shared/ImagePlaceholder.astro per technical design
+- [x] 1.7 Set up basic CSS Modules structure with variables and breakpoints per technical design
+- [x] 1.8 Create mock data files: src/data/catalog.json and src/data/categories.json
+- [x] 1.9 Set up API route handlers for newsletter endpoints in src/pages/api/newsletter/
+- [x] 1.10 Set up API route handlers for admin leads endpoints in src/pages/api/admin/leads/
 
 ## Phase 2: Core Implementation
 
 ### Product Catalog
-- [ ] 2.1 Create ProductGrid component src/components/catalog/ProductGrid.astro with store subscription
-- [ ] 2.2 Create ProductCard component src/components/catalog/ProductCard.astro with placeholder handling
-- [ ] 2.3 Create FilterPanel component src/components/catalog/FilterPanel.astro for category/tabs filtering
-- [ ] 2.4 Create SearchInput component src/components/catalog/SearchInput.astro with real-time filtering
-- [ ] 2.5 Implement category tab navigation logic for Gastronomia, Salumeria, Rosticceria, Tutti
-- [ ] 2.6 Implement search functionality with 100ms update requirement
-- [ ] 2.7 Create responsive grid layout (1/2/3 columns) using CSS Modules breakpoints
+- [x] 2.1 Create ProductGrid component src/components/catalog/ProductGrid.astro with store subscription
+- [x] 2.2 Create ProductCard component src/components/catalog/ProductCard.astro with placeholder handling
+- [x] 2.3 Create FilterPanel component src/components/catalog/FilterPanel.astro for category/tabs filtering
+- [x] 2.4 Create SearchInput component src/components/catalog/SearchInput.astro with real-time filtering
+- [x] 2.5 Implement category tab navigation logic for Gastronomia, Salumeria, Rosticceria, Tutti
+- [x] 2.6 Implement search functionality with 100ms update requirement
+- [x] 2.7 Create responsive grid layout (1/2/3 columns) using CSS Modules breakpoints
 
 ### Product Detail
-- [ ] 2.8 Create ProductDetail component src/components/catalog/ProductDetail.astro
-- [ ] 2.9 Implement image gallery with main image and thumbnails
-- [ ] 2.10 Create breadcrumb navigation component src/components/shared/Breadcrumb.astro
-- [ ] 2.11 Implement related products section (up to 3 from same category)
-- [ ] 2.12 Create 404 error page src/pages/404.astro for product not found
-- [ ] 2.13 Implement back-to-catalog link with filter preservation logic
+- [x] 2.8 Create ProductDetail component src/components/catalog/ProductDetail.astro
+- [x] 2.9 Implement image gallery with main image and thumbnails
+- [x] 2.10 Create breadcrumb navigation component src/components/shared/Breadcrumb.astro
+- [x] 2.11 Implement related products section (up to 3 from same category)
+- [x] 2.12 Create 404 error page src/pages/404.astro for product not found
+- [x] 2.13 Implement back-to-catalog link with filter preservation logic
 
 ### History Section
-- [ ] 2.14 Create Historia page src/pages/storia.astro
-- [ ] 2.15 Create Timeline component src/components/history/Timeline.astro
-- [ ] 2.16 Create VintagePhotoGallery component src/components/history/VintagePhotoGallery.astro
-- [ ] 2.17 Implement lightbox functionality for photo gallery
-- [ ] 2.18 Add family legacy narrative content mentioning founding year 1963
-- [ ] 2.19 Ensure all vintage photos have descriptive alt text with year when known
-- [ ] 2.20 Implement responsive layout for timeline (vertical on mobile, horizontal on desktop)
+- [x] 2.14 Create Historia page src/pages/storia.astro
+- [x] 2.15 Create Timeline component src/components/history/Timeline.astro
+- [x] 2.16 Create VintagePhotoGallery component src/components/history/VintagePhotoGallery.astro
+- [x] 2.17 Implement lightbox functionality for photo gallery
+- [x] 2.18 Add family legacy narrative content mentioning founding year 1963
+- [x] 2.19 Ensure all vintage photos have descriptive alt text with year when known
+- [x] 2.20 Implement responsive layout for timeline (vertical on mobile, horizontal on desktop)
 
 ### Newsletter Signup
-- [ ] 2.21 Create NewsletterForm component src/components/newsletter/NewsletterForm.astro
-- [ ] 2.22 Implement email validation (format, required field)
-- [ ] 2.23 Implement double opt-in flow: store pending lead, send confirmation email
-- [ ] 2.24 Create confirmation page src/pages/newsletter/confirm/[token].astro
-- [ ] 2.25 Create unsubscribe page src/pages/newsletter/unsubscribe/[token].astro
-- [ ] 2.26 Handle duplicate email scenarios (active, pending, unsubscribed)
-- [ ] 2.27 Add privacy notice with link to privacy policy
-- [ ] 2.28 Implement success/error messaging for all scenarios
+- [x] 2.21 Create NewsletterForm component src/components/newsletter/NewsletterForm.astro
+- [x] 2.22 Implement email validation (format, required field)
+- [x] 2.23 Implement double opt-in flow: store pending lead, send confirmation email
+- [x] 2.24 Create confirmation page src/pages/newsletter/confirm/[token].astro
+- [x] 2.25 Create unsubscribe page src/pages/newsletter/unsubscribe/[token].astro
+- [x] 2.26 Handle duplicate email scenarios (active, pending, unsubscribed)
+- [x] 2.27 Add privacy notice with link to privacy policy
+- [x] 2.28 Implement success/error messaging for all scenarios
 
 ### Leads Admin
-- [ ] 2.29 Create admin login page src/pages/account/login.astro
-- [ ] 2.30 Create admin dashboard wrapper src/pages/account/admin/index.astro
-- [ ] 2.31 Create LeadsTable component src/components/admin/LeadsTable.astro
-- [ ] 2.32 Implement authentication check using authStore for admin routes
-- [ ] 2.33 Implement leads table with sorting, pagination (>20 leads), and status filtering
-- [ ] 2.34 Create lead detail view modal/component
-- [ ] 2.35 Implement manual lead confirmation action
-- [ ] 2.36 Implement lead deletion with confirmation dialog
-- [ ] 2.37 Implement CSV export functionality for leads
-- [ ] 2.38 Set up environment variable handling for admin credentials
+- [x] 2.29 Create admin login page src/pages/account/login.astro
+- [x] 2.30 Create admin dashboard wrapper src/pages/account/admin/index.astro
+- [x] 2.31 Create LeadsTable component src/components/admin/LeadsTable.astro
+- [x] 2.32 Implement authentication check using authStore for admin routes
+- [x] 2.33 Implement leads table with sorting, pagination (>20 leads), and status filtering
+- [x] 2.34 Create lead detail view modal/component
+- [x] 2.35 Implement manual lead confirmation action
+- [x] 2.36 Implement lead deletion with confirmation dialog
+- [x] 2.37 Implement CSV export functionality for leads
+- [x] 2.38 Set up environment variable handling for admin credentials
 
 ## Phase 3: Integration / Wiring
 
-- [ ] 3.1 Set up routing for catalog pages: src/pages/catalog/index.astro, [category].astro, [slug].astro
-- [ ] 3.2 Connect ProductGrid to catalogStore and filterStore for derived state
-- [ ] 3.3 Wire up category navigation to update URL and filter state
-- [ ] 3.4 Wire up search input to update filter state in real-time
-- [ ] 3.5 Connect ProductDetail to catalogStore via slug parameter
-- [ ] 3.6 Wire up breadcrumb navigation to reflect current category and product
-- [ ] 3.7 Connect related products to display items from same category
-- [ ] 3.8 Wire up Historia page to load timeline and photo data
-- [ ] 3.9 Connect newsletter form to API endpoints for subscription
-- [ ] 3.10 Wire up confirmation and unsubscribe pages to validate tokens
-- [ ] 3.11 Connect admin leads table to leadsStore API endpoints
-- [ ] 3.12 Implement proper loading states and error boundaries
-- [ ] 3.13 Add meta tags and structured data for SEO (Schema.org for products)
-- [ ] 3.14 Ensure all interactive elements are keyboard accessible
+- [x] 3.1 Set up routing for catalog pages: src/pages/catalog/index.astro, [category].astro, [slug].astro
+- [x] 3.2 Connect ProductGrid to catalogStore and filterStore for derived state
+- [x] 3.3 Wire up category navigation to update URL and filter state
+- [x] 3.4 Wire up search input to update filter state in real-time
+- [x] 3.5 Connect ProductDetail to catalogStore via slug parameter
+- [x] 3.6 Wire up breadcrumb navigation to reflect current category and product
+- [x] 3.7 Connect related products to display items from same category
+- [x] 3.8 Wire up Historia page to load timeline and photo data
+- [x] 3.9 Connect newsletter form to API endpoints for subscription
+- [x] 3.10 Wire up confirmation and unsubscribe pages to validate tokens
+- [x] 3.11 Connect admin leads table to leadsStore API endpoints
+- [x] 3.12 Implement proper loading states and error boundaries
+- [x] 3.13 Add meta tags and structured data for SEO (Schema.org for products)
+- [x] 3.14 Ensure all interactive elements are keyboard accessible
 
 ## Phase 4: Testing / Verification
 
@@ -123,3 +123,5 @@
 - [ ] 5.6 Update README.md with feature catalog documentation if needed
 - [ ] 5.7 Ensure all files follow consistent formatting (Prettier/ESLint)
 - [ ] 5.8 Verify bundle size is reasonable for initial load
+
+(End of file - total 125 lines)

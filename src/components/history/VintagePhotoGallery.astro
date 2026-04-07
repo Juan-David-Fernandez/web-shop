@@ -1,0 +1,302 @@
+---
+/**
+ * VintagePhotoGallery - Historical photos with lightbox functionality
+ */
+
+interface Props {
+  photos: Array<{
+    id: string
+    src: string
+    alt: string
+    caption?: string
+    year?: number
+  }>
+  class?: string
+}
+
+const { photos, class: className } = Astro.props
+---
+
+<div class={`vintage-gallery ${className || ''}`}>
+  <div class="gallery-grid">
+    {photos.map((photo, index) => (
+      <button 
+        class="gallery-item" 
+        data-index={index}
+        aria-label={`Apri foto: ${photo.alt}`}
+      >
+        <div class="photo-wrapper">
+          <div class="photo-placeholder">
+            <span class="placeholder-year">{photo.year || '?'}</span>
+          </div>
+        </div>
+        {photo.caption && (
+          <p class="photo-caption">{photo.caption}</p>
+        )}
+      </button>
+    ))}
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Galleria foto" style="display: none;">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Chiudi">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Foto precedente">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Foto successiva">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+    
+    <div class="lightbox-content">
+      <div class="lightbox-image">
+        <div class="lightbox-placeholder">
+          <span class="placeholder-year-large"></span>
+        </div>
+      </div>
+      <p class="lightbox-caption"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .vintage-gallery {
+    width: 100%;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .gallery-item {
+    display: flex;
+    flex-direction: column;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+
+  .photo-wrapper {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .gallery-item:hover .photo-wrapper {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-year {
+    font-family: var(--font-primary);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-brown-light);
+    opacity: 0.5;
+  }
+
+  .photo-caption {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-600);
+    margin: var(--spacing-sm) 0 0 0;
+    text-align: center;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--color-white);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .lightbox-prev {
+    left: var(--spacing-lg);
+  }
+
+  .lightbox-next {
+    right: var(--spacing-lg);
+  }
+
+  .lightbox-content {
+    max-width: 80%;
+    max-height: 80%;
+    text-align: center;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-cream);
+  }
+
+  .lightbox-placeholder {
+    width: 600px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-year-large {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-brown-light);
+    opacity: 0.5;
+  }
+
+  .lightbox-caption {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-white);
+    margin: var(--spacing-md) 0 0 0;
+  }
+</style>
+
+<script define:vars={{ photos }}>
+  // Gallery lightbox functionality
+  const lightbox = document.getElementById('lightbox')
+  const lightboxClose = document.getElementById('lightbox-close')
+  const lightboxPrev = document.getElementById('lightbox-prev')
+  const lightboxNext = document.getElementById('lightbox-next')
+  const lightboxCaption = lightbox?.querySelector('.lightbox-caption')
+  const placeholderYear = lightbox?.querySelector('.placeholder-year-large')
+  
+  let currentIndex = 0
+
+  // Open lightbox on gallery item click
+  document.querySelectorAll('.gallery-item').forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentIndex = index
+      showPhoto(index)
+      if (lightbox) lightbox.style.display = 'flex'
+      document.body.style.overflow = 'hidden'
+    })
+  })
+
+  // Close lightbox
+  lightboxClose?.addEventListener('click', closeLightbox)
+  
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox()
+  })
+
+  // Navigation
+  lightboxPrev?.addEventListener('click', () => navigate(-1))
+  lightboxNext?.addEventListener('click', () => navigate(1))
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox || lightbox.style.display === 'none') return
+    
+    if (e.key === 'Escape') closeLightbox()
+    if (e.key === 'ArrowLeft') navigate(-1)
+    if (e.key === 'ArrowRight') navigate(1)
+  })
+
+  function showPhoto(index) {
+    const photo = photos[index]
+    if (photo && lightboxCaption) {
+      lightboxCaption.textContent = photo.caption || photo.alt
+    }
+    if (photo && placeholderYear) {
+      placeholderYear.textContent = photo.year || '?'
+    }
+    currentIndex = index
+  }
+
+  function navigate(direction) {
+    const newIndex = currentIndex + direction
+    if (newIndex >= 0 && newIndex < photos.length) {
+      showPhoto(newIndex)
+    }
+  }
+
+  function closeLightbox() {
+    if (lightbox) lightbox.style.display = 'none'
+    document.body.style.overflow = ''
+  }
+</script>

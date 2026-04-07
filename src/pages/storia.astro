@@ -1,0 +1,232 @@
+---
+/**
+ * Storia (History) Page - Family legacy narrative
+ */
+import Layout from '../layouts/Layout.astro'
+import Timeline from '../components/history/Timeline.astro'
+import VintagePhotoGallery from '../components/history/VintagePhotoGallery.astro'
+
+// Timeline events - at least 5 milestones
+const timelineEvents = [
+  {
+    year: 1963,
+    title: 'Fondazione',
+    description: 'Silvio Battistini apre La Salumeria Silvio a Parma, iniziando un viaggio fatto di passione e qualità.'
+  },
+  {
+    year: 1978,
+    title: 'Espansione',
+    description: 'La famiglia amplia il negozio aggiungendo una sezione dedicata ai formaggi artigianali.'
+  },
+  {
+    year: 1995,
+    title: 'Tradizione e Innovazione',
+    description: 'Introduciamo i prodotti biologici e le specialità regionali da tutta Italia.'
+  },
+  {
+    year: 2010,
+    title: 'Generazioni',
+    description: 'I figli di Silvio rilevano l\'attività, portando nuova energia senza dimenticare la tradizione.'
+  },
+  {
+    year: 2020,
+    title: 'Presente',
+    description: 'La Salumeria Silvio continua a essere un punto di riferimento per gli amanti dell\'enogastronomia italiana.'
+  }
+]
+
+// Vintage photos with descriptive alt text and years
+const vintagePhotos = [
+  {
+    id: 'photo-1',
+    src: '',
+    alt: 'Foto del negozio nel 1963',
+    caption: 'Il nostro negozio all\'apertura nel 1963',
+    year: 1963
+  },
+  {
+    id: 'photo-2',
+    src: '',
+    alt: 'Foto della famiglia negli anni \'70',
+    caption: 'La famiglia Battistini negli anni \'70',
+    year: 1975
+  },
+  {
+    id: 'photo-3',
+    src: '',
+    alt: 'Foto del banco gastronomia nel 1990',
+    caption: 'Il nostro banco gastronomia negli anni \'90',
+    year: 1990
+  },
+  {
+    id: 'photo-4',
+    src: '',
+    alt: 'Foto della salumeria nel 2005',
+    caption: 'La salumeria oggi',
+    year: 2005
+  }
+]
+---
+
+<Layout title="La Nostra Storia - La Salumeria Silvio" description="La storia della nostra famiglia dal 1963. Tradizione, passione e qualità italiana.">
+  <article class="storia-page">
+    <header class="page-header">
+      <h1 class="page-title">La Nostra Storia</h1>
+      <p class="page-subtitle">Dal 1963 al vostro tavolo</p>
+    </header>
+
+    <section class="legacy-narrative">
+      <div class="narrative-content">
+        <p class="narrative-lead">
+          La Salumeria Silvio è la storia di una famiglia che da oltre sessant'anni porta avanti la tradizione dell'eccellenza gastronomica italiana.
+        </p>
+        <p>
+          Tutto è iniziato nel <strong>1963</strong>, quando Silvio Battistini decise di trasformare la sua passione per i salumi e i formaggi artigianali in un negozio. Con un banco di appena pochi metri quadrati e una determinazione incrollabile, Silvio costruì le fondamenta di quello che sarebbe diventato un punto di riferimento per Parma e dintorni.
+        </p>
+        <p>
+          La nostra filosofia è semplice: <strong>qualità, tradizione e passione</strong>. Ogni prodotto che trovate nei nostri scaffali è selezionato con cura, provenendo da piccoli produttori che condividono i nostri valori. Dal Prosciutto di Parma DOP al Pecorino Romano, dalla Mozzarella di Bufala Campana alla porchetta cotta a legna, ogni prodotto racconta una storia di mestiere e dedizione.
+        </p>
+        <p>
+          Oggi, dopo più di sessant'anni, continuiamo a servire i nostri clienti con lo stesso entusiasmo e la stessa attenzione alla qualità che hanno reso grande il nostro nome. La nostra famiglia è cresciuta, ma i valori sono rimasti gli stessi: il rispetto per la materia prima, la ricerca della perfezione e il legame con il territorio.
+        </p>
+        <p class="narrative-signature">
+          Vi aspettiamo per condividere con voi la nostra passione per i sapori autentici dell'Italia.
+        </p>
+      </div>
+    </section>
+
+    <section class="timeline-section">
+      <h2 class="section-title">I nostri traguardi</h2>
+      <Timeline events={timelineEvents} />
+    </section>
+
+    <section class="photos-section">
+      <h2 class="section-title">Memorie dal passato</h2>
+      <VintagePhotoGallery photos={vintagePhotos} />
+    </section>
+
+    <section class="cta-section">
+      <p class="cta-text">Venite a trovarci e scoprite i nostri prodotti</p>
+      <a href="/catalog" class="cta-button">Visita il catalogo</a>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .storia-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .page-header {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .page-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .page-subtitle {
+    font-family: var(--font-secondary);
+    font-size: var(--text-xl);
+    color: var(--color-brown);
+    margin: 0;
+  }
+
+  .legacy-narrative {
+    padding: var(--spacing-3xl) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .narrative-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .narrative-lead {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--color-brown);
+    line-height: 1.4;
+    margin: 0 0 var(--spacing-xl) 0;
+  }
+
+  .narrative-content p {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-700);
+    line-height: 1.8;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+
+  .narrative-content strong {
+    color: var(--color-brown-dark);
+    font-weight: 600;
+  }
+
+  .narrative-signature {
+    font-family: var(--font-primary);
+    font-style: italic;
+    font-size: var(--text-xl);
+    color: var(--color-gray-600);
+    margin-top: var(--spacing-xl);
+  }
+
+  .timeline-section,
+  .photos-section {
+    padding: var(--spacing-3xl) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .section-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    text-align: center;
+    margin: 0 0 var(--spacing-2xl) 0;
+  }
+
+  .cta-section {
+    padding: var(--spacing-3xl) 0;
+    text-align: center;
+  }
+
+  .cta-text {
+    font-family: var(--font-secondary);
+    font-size: var(--text-xl);
+    color: var(--color-gray-600);
+    margin: 0 0 var(--spacing-xl) 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    background: var(--color-brown);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    transition: background var(--transition-fast);
+  }
+
+  .cta-button:hover {
+    background: var(--color-brown-dark);
+  }
+
+  @media (min-width: 768px) {
+    .page-title {
+      font-size: var(--text-5xl);
+    }
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+/**
+ * ProductGrid - Main catalog grid component with store subscription
+ */
+
+import { filteredProductsStore, isLoadingStore, errorStore, loadCatalog } from '../../stores/catalogStore'
+import LoadingSpinner from '../shared/LoadingSpinner.astro'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+// Load catalog on mount (client-side)
+---
+
+<div class={`product-grid-wrapper ${className || ''}`}>
+  <div id="product-grid" class="product-grid">
+    {/* Client-side state will populate this */}
+  </div>
+  
+  <div id="grid-loading" class="grid-loading" style="display: none;">
+    <LoadingSpinner />
+  </div>
+  
+  <div id="grid-error" class="grid-error" style="display: none;">
+    <p class="error-message"></p>
+  </div>
+  
+  <div id="grid-empty" class="grid-empty" style="display: none;">
+    <p class="empty-message">Nessun prodotto trovato</p>
+  </div>
+</div>
+
+<style>
+  .product-grid-wrapper {
+    width: 100%;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+  }
+
+  @media (min-width: 640px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-xl);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .grid-loading,
+  .grid-error,
+  .grid-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    padding: var(--spacing-2xl);
+  }
+
+  .error-message,
+  .empty-message {
+    font-family: var(--font-primary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    text-align: center;
+  }
+
+  .error-message {
+    color: var(--color-error);
+  }
+</style>
+
+<script>
+  import { filteredProductsStore, isLoadingStore, errorStore, loadCatalog } from '../../stores/catalogStore'
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadCatalog()
+    renderProducts()
+    
+    // Subscribe to store changes
+    filteredProductsStore.subscribe(() => renderProducts())
+    isLoadingStore.subscribe(() => renderProducts())
+    errorStore.subscribe(() => renderProducts())
+  })
+
+  const categoryLabels: Record<string, string> = {
+    gastronomia: 'Gastronomia',
+    salumeria: 'Salumeria',
+    rosticceria: 'Rosticceria'
+  }
+
+  const categoryColors: Record<string, string> = {
+    gastronomia: '#22C55E',
+    salumeria: '#EF4444',
+    rosticceria: '#F59E0B'
+  }
+
+  function formatPrice(price: number): string {
+    return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(price)
+  }
+
+  function renderProducts() {
+    const grid = document.getElementById('product-grid')
+    const loadingEl = document.getElementById('grid-loading')
+    const errorEl = document.getElementById('grid-error')
+    const emptyEl = document.getElementById('grid-empty')
+    
+    if (!grid) return
+    
+    const isLoading = isLoadingStore.get()
+    const error = errorStore.get()
+    const products = filteredProductsStore.get()
+    
+    // Handle loading state
+    if (loadingEl) loadingEl.style.display = isLoading ? 'flex' : 'none'
+    if (isLoading) {
+      grid.innerHTML = ''
+      return
+    }
+    
+    // Handle error state
+    if (errorEl) errorEl.style.display = error ? 'flex' : 'none'
+    if (errorEl) errorEl.querySelector('.error-message')!.textContent = error || ''
+    if (error) {
+      grid.innerHTML = ''
+      return
+    }
+    
+    // Handle empty state
+    if (emptyEl) emptyEl.style.display = products.length === 0 ? 'flex' : 'none'
+    if (products.length === 0) {
+      grid.innerHTML = ''
+      return
+    }
+    
+    // Render products
+    grid.innerHTML = ''
+    products.forEach((product: any) => {
+      const card = document.createElement('a')
+      card.href = `/catalog/${product.slug}`
+      card.className = 'product-card'
+      
+      const categoryLabel = categoryLabels[product.category] || product.category
+      const categoryColor = categoryColors[product.category] || '#737373'
+      const formattedPrice = product.price ? formatPrice(product.price) : ''
+      
+      const attrsHtml = product.attributes ? product.attributes.slice(0, 3).map((attr: string) => 
+        `<span class="attribute-tag">${attr}</span>`
+      ).join('') : ''
+      
+      card.innerHTML = `
+        <div class="card-image">
+          <div class="placeholder-container">
+            <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="image-placeholder">
+              <rect width="100%" height="100%" fill="#f5f5dc" />
+              <rect x="0" y="0" width="100%" height="100%" fill="none" stroke="#d4c4a8" stroke-width="2" stroke-dasharray="8,4" />
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#8b7355" font-size="24" font-family="Georgia, serif">
+                ${product.name}
+              </text>
+            </svg>
+          </div>
+          <span class="category-badge" style="background-color: ${categoryColor}">
+            ${categoryLabel}
+          </span>
+        </div>
+        <div class="card-content">
+          <h3 class="product-name">${product.name}</h3>
+          <p class="product-description">${product.description}</p>
+          ${formattedPrice ? `<span class="product-price">${formattedPrice}</span>` : ''}
+          <div class="product-attributes">${attrsHtml}</div>
+        </div>
+      `
+      grid.appendChild(card)
+    })
+  }
+</script>

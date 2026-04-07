@@ -1,0 +1,173 @@
+---
+/**
+ * Newsletter Unsubscribe Page - Validates unsubscribe token
+ */
+import Layout from '../../layouts/Layout.astro'
+
+const token = Astro.url.searchParams.get('token')
+const pageTitle = token ? 'Cancella iscrizione' : 'Link non valido'
+---
+
+<Layout title={`${pageTitle} - La Salumeria Silvio`}>
+  <div class="unsubscribe-page">
+    <div class="unsubscribe-content">
+      {token ? (
+        <>
+          <div id="loading" class="state-container">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Elaborazione in corso...</p>
+          </div>
+          
+          <div id="success" class="state-container" style="display: none;">
+            <div class="success-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <h1 class="state-title">Iscrizione cancellata</h1>
+            <p class="state-message">La tua iscrizione alla newsletter è stata cancellata.</p>
+            <a href="/" class="cta-button">Torna alla home</a>
+          </div>
+          
+          <div id="error" class="state-container" style="display: none;">
+            <div class="error-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+            </div>
+            <h1 class="state-title">Link non valido</h1>
+            <p class="state-message">Il link di cancellazione non è più valido.</p>
+            <a href="/" class="cta-button">Torna alla home</a>
+          </div>
+        </>
+      ) : (
+        <>
+          <div class="error-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h1 class="state-title">Link non valido</h1>
+          <p class="state-message">È necessario un token di cancellazione valido.</p>
+          <a href="/" class="cta-button">Torna alla home</a>
+        </>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .unsubscribe-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+  }
+
+  .unsubscribe-content {
+    text-align: center;
+    max-width: 500px;
+  }
+
+  .state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--color-gray-200);
+    border-top-color: var(--color-brown);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .success-icon {
+    color: var(--color-success);
+  }
+
+  .error-icon {
+    color: var(--color-error);
+  }
+
+  .state-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .state-message {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-brown);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    transition: background var(--transition-fast);
+  }
+
+  .cta-button:hover {
+    background: var(--color-brown-dark);
+  }
+</style>
+
+<script define:vars={{ token }}>
+  import { unsubscribeLead } from '../../../stores/leadsStore'
+
+  if (token) {
+    unsubscribeLead(token).then(result => {
+      const loading = document.getElementById('loading')
+      const success = document.getElementById('success')
+      const error = document.getElementById('error')
+
+      if (result.success) {
+        if (loading) loading.style.display = 'none'
+        if (success) success.style.display = 'flex'
+        if (error) error.style.display = 'none'
+      } else {
+        if (loading) loading.style.display = 'none'
+        if (success) success.style.display = 'none'
+        if (error) error.style.display = 'flex'
+      }
+    }).catch(() => {
+      const loading = document.getElementById('loading')
+      const error = document.getElementById('error')
+      
+      if (loading) loading.style.display = 'none'
+      if (error) error.style.display = 'flex'
+    })
+  }
+</script>

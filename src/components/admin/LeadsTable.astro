@@ -1,0 +1,518 @@
+---
+/**
+ * LeadsTable - Admin table with sorting, pagination, and filtering
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<div class={`leads-table-wrapper ${className || ''}`}>
+  <!-- Filters and Search -->
+  <div class="table-controls">
+    <div class="control-group">
+      <label for="status-filter" class="control-label">Stato:</label>
+      <select id="status-filter" class="control-select">
+        <option value="all">Tutti</option>
+        <option value="active">Attivi</option>
+        <option value="pending">Pendenti</option>
+        <option value="unsubscribed">Cancellati</option>
+      </select>
+    </div>
+    
+    <div class="control-group">
+      <label for="leads-search" class="control-label">Cerca:</label>
+      <input 
+        type="text" 
+        id="leads-search" 
+        class="control-input" 
+        placeholder="Cerca per email..."
+      />
+    </div>
+    
+    <button id="export-csv" class="export-button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Esporta CSV
+    </button>
+  </div>
+  
+  <!-- Table -->
+  <div class="table-container">
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th data-sort="email" class="sortable">Email <span class="sort-icon">↕</span></th>
+          <th data-sort="status" class="sortable">Stato <span class="sort-icon">↕</span></th>
+          <th data-sort="createdAt" class="sortable">Iscritto il <span class="sort-icon">↕</span></th>
+          <th data-sort="confirmedAt" class="sortable">Confermato il <span class="sort-icon">↕</span></th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody id="leads-tbody">
+        <!-- Populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Pagination -->
+  <div class="table-pagination">
+    <span id="pagination-info" class="pagination-info">
+      Showing 0-0 of 0
+    </span>
+    <div class="pagination-controls">
+      <button id="prev-page" class="pagination-button" disabled>← Precedente</button>
+      <span id="page-indicator" class="page-indicator">1</span>
+      <button id="next-page" class="pagination-button" disabled>Successivo →</button>
+    </div>
+  </div>
+  
+  <!-- Loading State -->
+  <div id="leads-loading" class="table-loading" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>Caricamento...</p>
+  </div>
+  
+  <!-- Empty State -->
+  <div id="leads-empty" class="table-empty" style="display: none;">
+    <p>Nessun iscritto trovato</p>
+  </div>
+</div>
+
+<style>
+  .leads-table-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  /* Controls */
+  .table-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    align-items: flex-end;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .control-label {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gray-700);
+  }
+
+  .control-select,
+  .control-input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-900);
+    background: var(--color-white);
+  }
+
+  .control-select:focus,
+  .control-input:focus {
+    outline: none;
+    border-color: var(--color-brown);
+  }
+
+  .control-input {
+    width: 200px;
+  }
+
+  .export-button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-brown);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    margin-left: auto;
+  }
+
+  .export-button:hover {
+    background: var(--color-brown-dark);
+  }
+
+  /* Table */
+  .table-container {
+    overflow-x: auto;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+  }
+
+  .leads-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-secondary);
+  }
+
+  .leads-table th,
+  .leads-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .leads-table th {
+    background: var(--color-gray-50);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-gray-700);
+  }
+
+  .leads-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .leads-table th.sortable:hover {
+    background: var(--color-gray-100);
+  }
+
+  .sort-icon {
+    font-size: var(--text-xs);
+    margin-left: var(--spacing-xs);
+    opacity: 0.5;
+  }
+
+  .leads-table td {
+    font-size: var(--text-base);
+    color: var(--color-gray-900);
+  }
+
+  .leads-table tbody tr:hover {
+    background: var(--color-gray-50);
+  }
+
+  /* Status badges */
+  .status-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .status-badge.active {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
+  }
+
+  .status-badge.pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+  }
+
+  .status-badge.unsubscribed {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+  }
+
+  /* Action buttons */
+  .action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  .action-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-secondary);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .action-button.view {
+    background: var(--color-gray-100);
+    color: var(--color-gray-700);
+  }
+
+  .action-button.view:hover {
+    background: var(--color-gray-200);
+  }
+
+  .action-button.confirm {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
+  }
+
+  .action-button.confirm:hover {
+    background: rgba(34, 197, 94, 0.2);
+  }
+
+  .action-button.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+  }
+
+  .action-button.delete:hover {
+    background: rgba(239, 68, 68, 0.2);
+  }
+
+  /* Pagination */
+  .table-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+  }
+
+  .pagination-info {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-600);
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .pagination-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-gray-100);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    background: var(--color-gray-200);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .page-indicator {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-600);
+  }
+
+  /* Loading & Empty */
+  .table-loading,
+  .table-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    gap: var(--spacing-md);
+  }
+
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-brown);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .table-loading p,
+  .table-empty p {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+</style>
+
+<script>
+  import { 
+    filteredLeadsStore, 
+    leadsLoadingStore, 
+    leadsFilterStore, 
+    leadsSearchStore,
+    loadLeads,
+    setLeadsFilter,
+    setLeadsSearch,
+    manuallyConfirmLead,
+    deleteLead
+  } from '../../stores/leadsStore'
+  import { get } from 'nanostores'
+
+  const ITEMS_PER_PAGE = 20
+  let currentPage = 1
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadLeads()
+    renderTable()
+    
+    // Subscribe to store changes
+    filteredLeadsStore.subscribe(() => renderTable())
+    leadsLoadingStore.subscribe(() => renderTable())
+  })
+
+  function renderTable() {
+    const loading = get(leadsLoadingStore)
+    const leads = get(filteredLeadsStore)
+    const tbody = document.getElementById('leads-tbody')
+    const loadingEl = document.getElementById('leads-loading')
+    const emptyEl = document.getElementById('leads-empty')
+    const infoEl = document.getElementById('pagination-info')
+    const prevBtn = document.getElementById('prev-page') as HTMLButtonElement
+    const nextBtn = document.getElementById('next-page') as HTMLButtonElement
+    const pageIndicator = document.getElementById('page-indicator')
+
+    // Handle loading
+    if (loadingEl) loadingEl.style.display = loading ? 'flex' : 'none'
+    if (loading) return
+
+    // Handle empty
+    if (emptyEl) emptyEl.style.display = leads.length === 0 ? 'flex' : 'none'
+    if (tbody) tbody.innerHTML = ''
+
+    if (leads.length === 0) return
+
+    // Pagination
+    const totalPages = Math.ceil(leads.length / ITEMS_PER_PAGE)
+    const start = (currentPage - 1) * ITEMS_PER_PAGE
+    const end = Math.min(start + ITEMS_PER_PAGE, leads.length)
+    const pageLeads = leads.slice(start, end)
+
+    // Update pagination controls
+    if (infoEl) infoEl.textContent = `Showing ${start + 1}-${end} of ${leads.length}`
+    if (prevBtn) prevBtn.disabled = currentPage === 1
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages
+    if (pageIndicator) pageIndicator.textContent = String(currentPage)
+
+    // Render rows
+    pageLeads.forEach(lead => {
+      const row = document.createElement('tr')
+      
+      const statusLabel: Record<string, string> = {
+        active: 'Attivo',
+        pending: 'Pendenti',
+        unsubscribed: 'Cancellati'
+      }
+      
+      const createdAt = lead.createdAt ? new Date(lead.createdAt).toLocaleDateString('it-IT') : '-'
+      const confirmedAt = lead.confirmedAt ? new Date(lead.confirmedAt).toLocaleDateString('it-IT') : '-'
+      
+      row.innerHTML = `
+        <td>${lead.email}</td>
+        <td><span class="status-badge ${lead.status}">${statusLabel[lead.status] || lead.status}</span></td>
+        <td>${createdAt}</td>
+        <td>${confirmedAt}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="action-button view" data-id="${lead.id}" data-action="view">Dettagli</button>
+            ${lead.status === 'pending' ? `<button class="action-button confirm" data-id="${lead.id}" data-action="confirm">Conferma</button>` : ''}
+            <button class="action-button delete" data-id="${lead.id}" data-action="delete">Elimina</button>
+          </div>
+        </td>
+      `
+      tbody?.appendChild(row)
+    })
+
+    // Add event listeners to action buttons
+    tbody?.querySelectorAll('.action-button').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = e.target as HTMLElement
+        const id = target.dataset.id
+        const action = target.dataset.action
+
+        if (action === 'confirm' && id) {
+          if (confirm('Confermare manualmente questo iscritto?')) {
+            await manuallyConfirmLead(id)
+          }
+        } else if (action === 'delete' && id) {
+          if (confirm('Sei sicuro di voler eliminare questo iscritto?')) {
+            await deleteLead(id)
+          }
+        } else if (action === 'view' && id) {
+          const lead = leads.find(l => l.id === id)
+          if (lead) {
+            alert(`Email: ${lead.email}\nStato: ${statusLabel[lead.status]}\nCreato: ${createdAt}\nConfermato: ${confirmedAt}`)
+          }
+        }
+      })
+    })
+  }
+
+  // Filter and search handlers
+  document.getElementById('status-filter')?.addEventListener('change', (e) => {
+    setLeadsFilter((e.target as HTMLSelectElement).value as any)
+    currentPage = 1
+    renderTable()
+  })
+
+  document.getElementById('leads-search')?.addEventListener('input', (e) => {
+    setLeadsSearch((e.target as HTMLInputElement).value)
+    currentPage = 1
+    renderTable()
+  })
+
+  // Pagination handlers
+  document.getElementById('prev-page')?.addEventListener('click', () => {
+    currentPage--
+    renderTable()
+  })
+
+  document.getElementById('next-page')?.addEventListener('click', () => {
+    currentPage++
+    renderTable()
+  })
+
+  // Export CSV
+  document.getElementById('export-csv')?.addEventListener('click', () => {
+    const leads = get(filteredLeadsStore)
+    
+    const headers = ['Email', 'Stato', 'Iscritto il', 'Confermato il']
+    const rows = leads.map(lead => [
+      lead.email,
+      lead.status,
+      lead.createdAt ? new Date(lead.createdAt).toLocaleDateString('it-IT') : '',
+      lead.confirmedAt ? new Date(lead.confirmedAt).toLocaleDateString('it-IT') : ''
+    ])
+    
+    const csv = [headers, ...rows].map(row => row.join(',')).join('\n')
+    
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `leads_${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  })
+</script>

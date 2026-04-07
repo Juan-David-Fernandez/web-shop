@@ -1,0 +1,155 @@
+---
+/**
+ * Timeline - Chronological timeline of family milestones
+ */
+
+interface Props {
+  events: Array<{
+    year: number
+    title: string
+    description: string
+  }>
+  class?: string
+}
+
+const { events, class: className } = Astro.props
+
+// Sort events by year (oldest first)
+const sortedEvents = [...events].sort((a, b) => a.year - b.year)
+---
+
+<div class={`timeline ${className || ''}`}>
+  <div class="timeline-line"></div>
+  {sortedEvents.map((event, index) => (
+    <div class="timeline-item" data-year={event.year}>
+      <div class="timeline-marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="timeline-content">
+        <span class="timeline-year">{event.year}</span>
+        <h3 class="timeline-title">{event.title}</h3>
+        <p class="timeline-description">{event.description}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .timeline {
+    position: relative;
+    padding: var(--spacing-xl) 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Vertical timeline (mobile) */
+  .timeline-line {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-brown-light);
+    opacity: 0.3;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 60px;
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: 12px;
+    top: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  .marker-dot {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background: var(--color-brown);
+    border-radius: var(--radius-full);
+    border: 3px solid var(--color-cream);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline-content {
+    background: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline-year {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-brown);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .timeline-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .timeline-description {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Horizontal timeline (desktop) */
+  @media (min-width: 1024px) {
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--spacing-2xl) var(--spacing-xl);
+    }
+
+    .timeline-line {
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      width: 100%;
+    }
+
+    .timeline-item {
+      flex: 1;
+      padding-left: 0;
+      padding-bottom: 0;
+      padding-top: 60px;
+      text-align: center;
+    }
+
+    .timeline-marker {
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(50% - 9px);
+    }
+
+    .timeline-content {
+      padding: var(--spacing-lg);
+    }
+
+    .timeline-description {
+      max-width: 200px;
+      margin: 0 auto;
+    }
+  }
+</style>

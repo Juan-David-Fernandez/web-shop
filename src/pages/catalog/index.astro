@@ -1,0 +1,102 @@
+---
+/**
+ * Catalog Index Page - Main product catalog with filtering and search
+ */
+import Layout from '../../layouts/Layout.astro'
+import ProductGrid from '../../components/catalog/ProductGrid.astro'
+import FilterPanel from '../../components/catalog/FilterPanel.astro'
+import SearchInput from '../../components/catalog/SearchInput.astro'
+import NewsletterForm from '../../components/newsletter/NewsletterForm.astro'
+
+const title = 'Catalogo Prodotti | La Salumeria Silvio'
+const description = 'Scopri le nostre specialità: salumi, formaggi e prodotti gastronomici artigianali.'
+
+// Schema.org for website
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "La Salumeria Silvio",
+  "description": description,
+  "url": Astro.url.origin + "/catalog",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "/catalog?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  <div class="catalog-page">
+    <header class="catalog-header">
+      <h1 class="catalog-title">Il Nostro Catalogo</h1>
+      <p class="catalog-subtitle">Specialità tradizionali bergamasche dal 1963</p>
+    </header>
+    
+    <div class="catalog-controls">
+      <SearchInput />
+      <FilterPanel />
+    </div>
+    
+    <ProductGrid />
+    
+    <section class="newsletter-section">
+      <NewsletterForm />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .catalog-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+  }
+
+  .catalog-header {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .catalog-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .catalog-subtitle {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .catalog-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .newsletter-section {
+    margin-top: var(--spacing-3xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  @media (min-width: 768px) {
+    .catalog-page {
+      padding: var(--spacing-2xl);
+    }
+
+    .catalog-title {
+      font-size: var(--text-5xl);
+    }
+  }
+</style>

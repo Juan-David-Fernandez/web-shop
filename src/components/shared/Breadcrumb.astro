@@ -1,0 +1,93 @@
+---
+/**
+ * Breadcrumb - Navigation breadcrumb component
+ */
+
+interface BreadcrumbItem {
+  label: string
+  href: string
+}
+
+interface Props {
+  items: BreadcrumbItem[]
+  class?: string
+}
+
+const { items, class: className } = Astro.props
+---
+
+<nav class={`breadcrumb ${className || ''}`} aria-label="Breadcrumb">
+  <ol class="breadcrumb-list">
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1
+      return (
+        <li class="breadcrumb-item">
+          {isLast ? (
+            <span class="breadcrumb-current" aria-current="page">{item.label}</span>
+          ) : (
+            <>
+              <a href={item.href} class="breadcrumb-link">{item.label}</a>
+              <span class="breadcrumb-separator" aria-hidden="true">/</span>
+            </>
+          )}
+        </li>
+      )
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    width: 100%;
+    padding: var(--spacing-md) 0;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .breadcrumb-link {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-brown);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--color-brown-dark);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-400);
+  }
+
+  .breadcrumb-current {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gray-600);
+  }
+
+  @media (min-width: 640px) {
+    .breadcrumb-link,
+    .breadcrumb-current {
+      font-size: var(--text-base);
+    }
+  }
+</style>

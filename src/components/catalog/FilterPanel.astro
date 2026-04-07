@@ -1,0 +1,144 @@
+---
+/**
+ * FilterPanel - Category/tabs filtering component
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+const categories = [
+  { id: 'tutti', name: 'Tutti', slug: 'tutti' },
+  { id: 'gastronomia', name: 'Gastronomia', slug: 'gastronomia' },
+  { id: 'salumeria', name: 'Salumeria', slug: 'salumeria' },
+  { id: 'rosticceria', name: 'Rosticceria', slug: 'rosticceria' }
+]
+---
+
+<div class={`filter-panel ${className || ''}`}>
+  <nav class="category-tabs" role="tablist" aria-label="Categorias">
+    {categories.map((cat, index) => (
+      <button 
+        class="tab-button" 
+        data-category={cat.slug}
+        role="tab"
+        aria-selected={index === 0}
+        aria-controls={`panel-${cat.slug}`}
+      >
+        {cat.name}
+      </button>
+    ))}
+  </nav>
+</div>
+
+<style>
+  .filter-panel {
+    width: 100%;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .category-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-xs);
+    scrollbar-width: thin;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .category-tabs::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: var(--radius-full);
+  }
+
+  .tab-button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--radius-full);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gray-600);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+  }
+
+  .tab-button:hover {
+    border-color: var(--color-brown-light);
+    color: var(--color-brown);
+  }
+
+  .tab-button.active {
+    background: var(--color-brown);
+    border-color: var(--color-brown);
+    color: var(--color-white);
+  }
+
+  @media (min-width: 640px) {
+    .category-tabs {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      font-size: var(--text-base);
+      padding: var(--spacing-sm) var(--spacing-xl);
+    }
+  }
+</style>
+
+<script>
+  import { filterStore, updateFilters } from '../../stores/catalogStore'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-button')
+    
+    // Set initial active state from store
+    const currentFilter = filterStore.get()
+    const activeCategory = currentFilter.category || 'tutti'
+    setActiveTab(activeCategory)
+
+    // Handle tab clicks
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = (tab as HTMLElement).dataset.category || 'tutti'
+        updateFilters({ category })
+        setActiveTab(category)
+        
+        // Update URL without reload
+        const url = new URL(window.location.href)
+        if (category === 'tutti') {
+          url.searchParams.delete('category')
+        } else {
+          url.searchParams.set('category', category)
+        }
+        window.history.replaceState({}, '', url.toString())
+      })
+    })
+
+    // Check URL params on load
+    const urlParams = new URLSearchParams(window.location.search)
+    const urlCategory = urlParams.get('category')
+    if (urlCategory && urlCategory !== 'tutti') {
+      updateFilters({ category: urlCategory })
+      setActiveTab(urlCategory)
+    }
+  })
+
+  function setActiveTab(category: string) {
+    const tabs = document.querySelectorAll('.tab-button')
+    tabs.forEach(tab => {
+      const tabCategory = (tab as HTMLElement).dataset.category
+      tab.classList.toggle('active', tabCategory === category)
+      tab.setAttribute('aria-selected', String(tabCategory === category))
+    })
+  }
+</script>

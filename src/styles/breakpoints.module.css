@@ -1,0 +1,113 @@
+/**
+ * Responsive Breakpoints Configuration
+ * Mobile-first approach following common device sizes
+ */
+
+/* Base styles (mobile first - 320px+) */
+
+/* Small - phones landscape (640px) */
+@media (min-width: 640px) {
+  :root {
+    --breakpoint-sm: 640px;
+  }
+}
+
+/* Medium - tablets (768px) */
+@media (min-width: 768px) {
+  :root {
+    --breakpoint-md: 768px;
+  }
+}
+
+/* Large - laptops (1024px) */
+@media (min-width: 1024px) {
+  :root {
+    --breakpoint-lg: 1024px;
+  }
+}
+
+/* Extra large - desktops (1280px) */
+@media (min-width: 1280px) {
+  :root {
+    --breakpoint-xl: 1280px;
+  }
+}
+
+/* 2XL - large desktops (1536px) */
+@media (min-width: 1536px) {
+  :root {
+    --breakpoint-2xl: 1536px;
+  }
+}
+
+/* Utility classes for responsive behavior */
+@media (max-width: 639px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-lg-desktop {
+    display: none !important;
+  }
+}
+
+/* Grid column utilities */
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Container widths */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+  }
+}

@@ -1,0 +1,142 @@
+---
+/**
+ * Footer component - Site footer with links and info
+ */
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">La Salumeria Silvio</h3>
+        <p class="footer-text">
+          Dal 1963, tradizione e qualità nella gastronomia italiana.
+        </p>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-subtitle">Navigazione</h4>
+        <ul class="footer-links">
+          <li><a href="/catalog">Catalogo</a></li>
+          <li><a href="/storia">La Nostra Storia</a></li>
+          <li><a href="/account/login">Accesso Admin</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-subtitle">Contatti</h4>
+        <address class="footer-address">
+          <p>ViaExample, 123</p>
+          <p>Città, Italia</p>
+          <p><a href="mailto:info@lasalumeria.it">info@lasalumeria.it</a></p>
+        </address>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-subtitle">Iscriviti alla Newsletter</h4>
+        <p class="footer-text">Ricevi novità e offerte speciali.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} La Salumeria Silvio. Tutti i diritti riservati.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-brown-dark);
+    color: var(--color-cream);
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+    margin-top: auto;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  @media (min-width: 640px) {
+    .footer-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-content {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .footer-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-xl);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .footer-subtitle {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .footer-text {
+    font-size: var(--text-sm);
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .footer-links a {
+    color: var(--color-cream);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: opacity var(--transition-fast);
+  }
+
+  .footer-links a:hover {
+    opacity: 0.8;
+  }
+
+  .footer-address {
+    font-style: normal;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .footer-address p {
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .footer-address a {
+    color: var(--color-cream);
+    text-decoration: none;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    text-align: center;
+    font-size: var(--text-sm);
+    opacity: 0.7;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+</style>
