@@ -82,36 +82,36 @@
 
 ## Phase 4: Testing / Verification
 
-- [ ] 4.1 Verify all three categories display correct products when selected (spec scenario)
-- [ ] 4.2 Test search returns results within 100ms with various inputs
-- [ ] 4.3 Test empty search state shows "Nessun prodotto trovato" message
-- [ ] 4.4 Verify product cards link to correct detail pages
-- [ ] 4.5 Test grid layout responds correctly at all breakpoints (320px, 640px, 1024px)
-- [ ] 4.6 Verify product detail page displays name, description, category, price, image
-- [ ] 4.7 Test image gallery functionality with multiple images
-- [ ] 4.8 Verify breadcrumb navigation shows correct path and is clickable
-- [ ] 4.9 Test related products display when available (same category)
-- [ ] 4.10 Verify 404 page shows for invalid product URLs with "Prodotto non trovato" message
-- [ ] 4.11 Test history section displays at least 5 milestone events in chronological order
-- [ ] 4.12 Verify at least 3 vintage photos are displayed with captions
-- [ ] 4.13 Test photo lightbox opens/closes correctly with escape and outside click
-- [ ] 4.14 Validate legacy narrative mentions founding year 1963 and traditional values
-- [ ] 4.15 Test newsletter form validates email and shows appropriate errors
-- [ ] 4.16 Verify confirmation email is sent on valid submit (mock implementation)
-- [ ] 4.17 Test confirmation link activates subscription and shows success message
-- [ ] 4.18 Verify invalid/expired token shows appropriate error message
-- [ ] 4.19 Test duplicate email handling for all three scenarios (active, pending, unsubscribed)
-- [ ] 4.20 Verify unsubscribe functionality works correctly
-- [ ] 4.21 Confirm privacy notice is visible on newsletter form
-- [ ] 4.22 Test admin panel requires authentication and redirects unauthenticated users
-- [ ] 4.23 Verify leads table displays all subscriber data with correct columns
-- [ ] 4.24 Test table sorting, filtering by status, and search by email
-- [ ] 4.25 Verify lead details are viewable in modal/detail view
-- [ ] 4.26 Test admin can manually confirm pending leads
-- [ ] 4.27 Verify admin can delete leads with confirmation
-- [ ] 4.28 Test CSV export generates valid file with correct columns
-- [ ] 4.29 Verify invalid login shows error message and keeps user on login page
-- [ ] 4.30 Run Lighthouse audits: Performance > 90, SEO > 95, Accessibility > 90
+- [x] 4.1 Verify all three categories display correct products when selected (spec scenario)
+- [x] 4.2 Test search returns results within 100ms with various inputs
+- [x] 4.3 Test empty search state shows "Nessun prodotto trovato" message
+- [x] 4.4 Verify product cards link to correct detail pages
+- [x] 4.5 Test grid layout responds correctly at all breakpoints (320px, 640px, 1024px)
+- [x] 4.6 Verify product detail page displays name, description, category, price, image
+- [x] 4.7 Test image gallery functionality with multiple images
+- [x] 4.8 Verify breadcrumb navigation shows correct path and is clickable
+- [x] 4.9 Test related products display when available (same category)
+- [x] 4.10 Verify 404 page shows for invalid product URLs with "Prodotto non trovato" message
+- [x] 4.11 Test history section displays at least 5 milestone events in chronological order
+- [x] 4.12 Verify at least 3 vintage photos are displayed with captions
+- [x] 4.13 Test photo lightbox opens/closes correctly with escape and outside click
+- [x] 4.14 Validate legacy narrative mentions founding year 1963 and traditional values
+- [x] 4.15 Test newsletter form validates email and shows appropriate errors
+- [x] 4.16 Verify confirmation email is sent on valid submit (mock implementation)
+- [x] 4.17 Test confirmation link activates subscription and shows success message
+- [x] 4.18 Verify invalid/expired token shows appropriate error message
+- [x] 4.19 Test duplicate email handling for all three scenarios (active, pending, unsubscribed)
+- [x] 4.20 Verify unsubscribe functionality works correctly
+- [x] 4.21 Confirm privacy notice is visible on newsletter form
+- [x] 4.22 Test admin panel requires authentication and redirects unauthenticated users
+- [x] 4.23 Verify leads table displays all subscriber data with correct columns
+- [x] 4.24 Test table sorting, filtering by status, and search by email
+- [x] 4.25 Verify lead details are viewable in modal/detail view
+- [x] 4.26 Test admin can manually confirm pending leads
+- [x] 4.27 Verify admin can delete leads with confirmation
+- [x] 4.28 Test CSV export generates valid file with correct columns
+- [x] 4.29 Verify invalid login shows error message and keeps user on login page
+- [x] 4.30 Run Lighthouse audits: Performance > 90, SEO > 95, Accessibility > 90
 
 ## Phase 5: Cleanup / Documentation
 

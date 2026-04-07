@@ -485,3 +485,35 @@ El diseño incluye un sistema completo de catálogo con filtrado y paginación, 
   
 - **Placeholder vs Imágenes Reales**: El manejo de errores de carga de imágenes necesita testing exhaustivo
   - *Mitigación*: Implementar retry mechanism y fallback robusto
+
+---
+
+## Estado del Proyecto (Actualizado)
+
+### Phase 1: Foundation ✅
+- Tipos TypeScript: Product, Category, Lead, TimelineEvent
+- Nano Stores: catalogStore, leadsStore, cartStore, authStore
+- Datos mock: catalog.json, categories.json
+- API endpoints: newsletter, admin leads
+
+### Phase 2: Core Implementation ✅
+- ProductGrid, ProductCard, FilterPanel, SearchInput
+- ProductDetail con galería y productos relacionados
+- Timeline y VintagePhotoGallery para historia
+- NewsletterForm con double opt-in
+- LeadsTable para admin
+
+### Phase 3: Integration/Wiring ✅
+- Páginas: /catalog, /catalog/[category], /catalog/[slug]
+- Homepage con hero, features, preview de categorías
+- Historia (storia) con timeline y fotos vintage
+- Schema.org JSON-LD para SEO
+- Fix: CSS modules en frontmatter, nanostores v1.x API
+
+### Phase 4: Verification ✅ PASS
+- Home: 200 OK
+- Catalog: 200 OK, 12 productos cargados
+- Product Detail: 200 OK
+- Filtros de categoría: funcionando
+- Búsqueda: 100ms debounce funcionando
+- Breadcrumb y related products: OK
