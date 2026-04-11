@@ -2,9 +2,9 @@
 
 Plataforma web para La Salumeria Silvio, gastronomía histórica de Bérgamo (Italia) desde 1963.
 
-## 🌐 Sitio
+## 🌐 Estado
 
-- **URL**: https://lasalumeria-silvio.it (en producción)
+- **Desarrollo local**: `http://localhost:4321`
 - **Stack**: Astro 5.x + React islands + Nano Stores
 
 ## ✨ Features Implementados
