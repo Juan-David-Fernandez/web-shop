@@ -48,36 +48,33 @@ npm run check
 npm run lint
 ```
 
-## 🤖 Desenvolvimento con IA (OpenCode)
+## 🤖 Desarrollo con IA (Gentle.ai)
 
-Este proyecto usa **OpenCode** como AI assistant con workflow SDD (Spec-Driven Development).
+Este proyecto usa **Gentle.ai** como AI assistant con workflow SDD (Spec-Driven Development).
 
-### Instalación de OpenCode
+### Instalación con Homebrew
 
 ```bash
-# macOS / Linux
-curl -fsSL https://get.opencode.ai | bash
-
-# O con Homebrew
-brew install opencode
+brew tap gentle-ai/gentle-ai
+brew install gentle-ai
 ```
 
-### Configuración del proyecto
+### Comandos SDD
 
-1. Ejecutar `opencode` en la raíz del proyecto
-2. El orchestrator detectará automáticamente el stack (Astro + React)
-3. Comandos disponibles:
-   - `/sdd-init` — Inicializar contexto SDD
-   - `/sdd-explore <tema>` — Investigar algo
-   - `/sdd-new <nombre>` — Nuevo cambio
-   - `/sdd-apply <cambio>` — Implementar tareas
-   - `/sdd-verify <cambio>` — Verificar implementación
+- `/sdd-init` — Inicializar contexto SDD
+- `/sdd-explore <tema>` — Investigar algo
+- `/sdd-new <nombre>` — Nuevo cambio
+- `/sdd-apply <cambio>` — Implementar tareas
+- `/sdd-verify <cambio>` — Verificar implementación
+- `/sdd-archive <cambio>` — Archivar cambio completado
 
 ### Workflow SDD
 
 ```
 Proposal → Specs → Design → Tasks → Apply → Verify → Archive
 ```
+
+更多 información: https://github.com/gentle-ai/gentle-ai
 
 ## 📁 Estructura
 
