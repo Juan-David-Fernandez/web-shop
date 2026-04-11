@@ -74,7 +74,7 @@ brew install gentle-ai
 Proposal → Specs → Design → Tasks → Apply → Verify → Archive
 ```
 
-更多 información: https://github.com/gentle-ai/gentle-ai
+Más información: https://github.com/Gentleman-Programming/gentle-ai
 
 ## 📁 Estructura
 
