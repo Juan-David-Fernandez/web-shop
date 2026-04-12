@@ -1,6 +1,7 @@
 ---
 /**
- * Admin Login Page - Authentication for admin panel
+ * Login Page - Authentication for Cliente, Owner and Staff
+ * Spec: user-login
  */
 import Layout from '../../layouts/Layout.astro'
 ---
@@ -9,47 +10,55 @@ import Layout from '../../layouts/Layout.astro'
   <div class="login-page">
     <div class="login-container">
       <div class="login-header">
-        <h1 class="login-title">Area Amministrativa</h1>
-        <p class="login-subtitle">Accedi per gestire gli iscritti alla newsletter</p>
+        <h1 class="login-title">Accedi al tuo account</h1>
+        <p class="login-subtitle">
+          Ingresa le tue credenziali per continuare
+        </p>
       </div>
-      
-      <form id="login-form" class="login-form" novalidate>
+
+      <form id="login-form" class="login-form" method="POST" novalidate>
         <div class="form-field">
-          <label for="admin-email" class="field-label">Email</label>
-          <input 
-            type="email" 
-            id="admin-email" 
+          <label for="email" class="field-label">Email</label>
+          <input
+            type="email"
+            id="email"
             name="email"
-            class="field-input" 
+            class="field-input"
             placeholder="email@esempio.com"
             required
             autocomplete="email"
           />
+          <span class="field-error" id="email-error"></span>
         </div>
-        
+
         <div class="form-field">
-          <label for="admin-password" class="field-label">Password</label>
-          <input 
-            type="password" 
-            id="admin-password" 
+          <label for="password" class="field-label">Password</label>
+          <input
+            type="password"
+            id="password"
             name="password"
-            class="field-input" 
+            class="field-input"
             placeholder="••••••••"
             required
             autocomplete="current-password"
           />
+          <span class="field-error" id="password-error"></span>
         </div>
-        
+
         <div id="login-error" class="login-error" role="alert" style="display: none;">
           <p class="error-text"></p>
         </div>
-        
+
         <button type="submit" class="login-button">
           Accedi
         </button>
       </form>
-      
+
       <div class="login-footer">
+        <p>
+          Non hai un account?
+          <a href="/account/register" class="register-link">Registrati</a>
+        </p>
         <a href="/" class="back-link">← Torna alla home</a>
       </div>
     </div>
@@ -135,6 +144,17 @@ import Layout from '../../layouts/Layout.astro'
     color: var(--color-gray-400);
   }
 
+  .field-input.error {
+    border-color: var(--color-error);
+  }
+
+  .field-error {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-error);
+    min-height: 1.4em;
+  }
+
   .login-error {
     padding: var(--spacing-md);
     background: rgba(239, 68, 68, 0.1);
@@ -170,6 +190,26 @@ import Layout from '../../layouts/Layout.astro'
   .login-footer {
     margin-top: var(--spacing-xl);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .login-footer p {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .register-link {
+    color: var(--color-brown);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .register-link:hover {
+    text-decoration: underline;
   }
 
   .back-link {
@@ -187,17 +227,17 @@ import Layout from '../../layouts/Layout.astro'
 </style>
 
 <script>
-  import { login, persistAuth } from '../../stores/authStore'
+  import { login } from '../../stores/authStore'
 
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('login-form') as HTMLFormElement
-    const emailInput = document.getElementById('admin-email') as HTMLInputElement
-    const passwordInput = document.getElementById('admin-password') as HTMLInputElement
+    const emailInput = document.getElementById('email') as HTMLInputElement
+    const passwordInput = document.getElementById('password') as HTMLInputElement
     const errorDiv = document.getElementById('login-error')
 
     // Check if already logged in
     if (localStorage.getItem('auth_user')) {
-      window.location.href = '/account/admin'
+      window.location.href = '/account/profile'
       return
     }
 
@@ -210,28 +250,42 @@ import Layout from '../../layouts/Layout.astro'
       }
     }
 
+    // Hide error
+    function hideError() {
+      if (errorDiv) {
+        errorDiv.style.display = 'none'
+      }
+    }
+
     // Handle form submission
     form?.addEventListener('submit', async (e) => {
       e.preventDefault()
-      
-      if (errorDiv) errorDiv.style.display = 'none'
+      hideError()
 
       const email = emailInput?.value.trim()
       const password = passwordInput?.value
 
-      if (!email || !password) {
-        showError('Inserisci email e password')
+      if (!email) {
+        showError('El email es requerido')
+        emailInput?.focus()
+        return
+      }
+
+      if (!password) {
+        showError('La password es requerida')
+        passwordInput?.focus()
         return
       }
 
       const result = await login(email, password)
 
       if (result.success) {
-        const user = JSON.parse(localStorage.getItem('auth_user') || '{}')
-        if (user) persistAuth(user)
-        window.location.href = '/account/admin'
+        // Redirect to /account/profile (AR-002, R-LOG-004)
+        window.location.href = '/account/profile'
       } else {
         showError(result.message)
+        // Clear password field (S-LOG-006)
+        if (passwordInput) passwordInput.value = ''
       }
     })
   })
