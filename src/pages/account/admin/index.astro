@@ -2,8 +2,8 @@
 /**
  * Admin Dashboard - Leads management panel with auth check
  */
-import Layout from '../../layouts/Layout.astro'
-import LeadsTable from '../../components/admin/LeadsTable.astro'
+import Layout from '../../../layouts/Layout.astro'
+import LeadsTable from '../../../components/admin/LeadsTable.astro'
 ---
 
 <Layout title="Area Amministrativa - La Salumeria Silvio">
@@ -147,7 +147,7 @@ import LeadsTable from '../../components/admin/LeadsTable.astro'
 </style>
 
 <script>
-  import { logout, isAuthenticated, initAuth } from '../../stores/authStore'
+  import { logout, isAuthenticated, initAuth } from '../../../stores/authStore'
 
   document.addEventListener('DOMContentLoaded', () => {
     // Initialize auth

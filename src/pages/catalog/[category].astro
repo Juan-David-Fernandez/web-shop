@@ -1,7 +1,10 @@
 ---
 /**
  * Category Page - Products filtered by category
+ * Uses static prerendering for known categories
  */
+export const prerender = true
+
 import Layout from '../../layouts/Layout.astro'
 import ProductGrid from '../../components/catalog/ProductGrid.astro'
 import FilterPanel from '../../components/catalog/FilterPanel.astro'

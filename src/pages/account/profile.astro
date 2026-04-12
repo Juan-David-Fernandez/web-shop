@@ -1,0 +1,544 @@
+---
+/**
+ * Profile Page - User profile and settings
+ * Requires authentication
+ */
+import Layout from '../../layouts/Layout.astro'
+---
+
+<Layout title="Il tuo profilo - La Salumeria Silvio">
+  <div class="profile-page">
+    <div class="profile-container">
+      <div class="profile-header">
+        <h1 class="page-title">Il tuo profilo</h1>
+        <p class="profile-subtitle">Gestisci le tue informazioni personali</p>
+      </div>
+
+      <div class="profile-content">
+        <!-- Profile Info Section -->
+        <div class="profile-info">
+          <div class="info-card">
+            <h2 class="card-title">Informazioni personali</h2>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Nome</span>
+                <span class="info-value" id="user-name">-</span>
+                <input type="text" id="user-name-input" class="info-input" required minlength="2" />
+              </div>
+              <div class="info-item">
+                <span class="info-label">Email</span>
+                <span class="info-value" id="user-email">-</span>
+                <input type="email" id="user-email-input" class="info-input" required />
+              </div>
+              <div class="info-item">
+                <span class="info-label">Telefono</span>
+                <span class="info-value" id="user-phone">-</span>
+                <input type="tel" id="user-phone-input" class="info-input" />
+              </div>
+              <div class="info-item">
+                <span class="info-label">Tipo account</span>
+                <span class="info-value" id="user-role">Cliente</span>
+              </div>
+            </div>
+            <div class="edit-actions">
+              <button type="button" class="action-btn edit-btn" id="edit-profile-btn">Modifica profilo</button>
+              <button type="button" class="action-btn save-btn" id="save-profile-btn">Salva modifiche</button>
+              <button type="button" class="action-btn cancel-btn" id="cancel-edit-btn">Annulla</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password change section -->
+        <div class="password-section" id="password-section">
+          <h2 class="section-title">Cambia Password</h2>
+          <form id="password-form" class="password-form">
+            <div class="form-field">
+              <label for="current-password" class="field-label">Password attuale</label>
+              <input type="password" id="current-password" name="currentPassword" class="field-input" required minlength="6" />
+            </div>
+            <div class="form-field">
+              <label for="new-password" class="field-label">Nuova password</label>
+              <input type="password" id="new-password" name="newPassword" class="field-input" required minlength="6" />
+            </div>
+            <div class="form-field">
+              <label for="confirm-password" class="field-label">Conferma password</label>
+              <input type="password" id="confirm-password" name="confirmPassword" class="field-input" required minlength="6" />
+            </div>
+            <div class="form-error" id="password-error"></div>
+            <button type="submit" class="action-btn password-btn">Cambia password</button>
+          </form>
+        </div>
+
+        <!-- Delete account section -->
+        <div class="delete-section" id="delete-section">
+          <h2 class="section-title">Elimina il tuo account</h2>
+          <p class="delete-warning">Attenzione: questa azione è irreversibile!</p>
+          <form id="delete-form" class="delete-form">
+            <div class="form-field">
+              <label for="confirm-delete" class="field-label">Scrivi <strong>ELIMINA</strong> per confermare</label>
+              <input type="text" id="confirm-delete" name="confirmDelete" class="field-input" required pattern="ELIMINA" />
+            </div>
+            <div class="form-error" id="delete-error"></div>
+            <button type="submit" class="action-btn delete-btn">Elimina il mio account</button>
+          </form>
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="profile-actions">
+          <a href="/account/orders" class="action-btn">
+            I tuoi ordini
+          </a>
+          <a href="/account/addresses" class="action-btn">
+            Indirizzi di spedizione
+          </a>
+          <button class="action-btn logout-btn" id="logout-btn">
+            Esci dal tuo account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .profile-page {
+    min-height: 70vh;
+    padding: var(--spacing-2xl);
+    background: var(--color-cream);
+  }
+
+  .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .profile-header {
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+  }
+
+  .page-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .profile-subtitle {
+    font-family: var(--font-secondary);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+  }
+
+  .info-card {
+    padding: var(--spacing-lg);
+    background: var(--color-cream);
+    border-radius: var(--radius-md);
+  }
+
+  .card-title {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-brown);
+    margin: 0 0 var(--spacing-md);
+  }
+
+  .info-grid {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .info-label {
+    font-family: var(--font-secondary);
+    color: var(--color-gray-600);
+  }
+
+  .info-value {
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    color: var(--color-gray-900);
+  }
+
+  .info-value.hidden {
+    display: none;
+  }
+
+  .info-input {
+    display: none;
+    width: 200px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+  }
+
+  .info-input.active {
+    display: block;
+  }
+
+  .info-input.active:focus {
+    outline: none;
+    border-color: var(--color-brown);
+  }
+
+  .edit-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .action-btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-brown);
+    color: var(--color-white);
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    transition: background var(--transition-fast);
+    border: none;
+    cursor: pointer;
+  }
+
+  .action-btn:hover {
+    background: var(--color-brown-dark);
+  }
+
+  .edit-btn {
+    display: inline-block;
+  }
+
+  .edit-btn.saving {
+    display: none;
+  }
+
+  .save-btn {
+    display: none;
+  }
+
+  .save-btn.active {
+    display: inline-block;
+  }
+
+  .cancel-btn {
+    display: none;
+    background: var(--color-gray-500);
+  }
+
+  .cancel-btn.active {
+    display: inline-block;
+  }
+
+  /* Password section */
+  .password-section {
+    padding: var(--spacing-lg);
+    background: var(--color-cream);
+    border-radius: var(--radius-md);
+  }
+
+  .section-title {
+    font-family: var(--font-secondary);
+    font-size: var(--text-lg);
+    color: var(--color-brown);
+    margin: 0 0 var(--spacing-md);
+  }
+
+  .password-form, .delete-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .field-label {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-700);
+  }
+
+  .field-input {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--color-brown);
+  }
+
+  .form-error {
+    color: var(--color-error);
+    font-size: var(--text-sm);
+    min-height: 1.2em;
+  }
+
+  .password-btn {
+    background: var(--color-brown);
+    border: none;
+    align-self: flex-start;
+  }
+
+  /* Delete section */
+  .delete-section {
+    padding: var(--spacing-lg);
+    background: #fef2f2;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+  }
+
+  .delete-warning {
+    color: var(--color-error);
+    font-weight: 500;
+    margin: 0 0 var(--spacing-md);
+  }
+
+  .delete-btn {
+    background: var(--color-error);
+    border: none;
+    align-self: flex-start;
+  }
+
+  .delete-btn:hover {
+    background: #dc2626;
+  }
+
+  /* Profile actions */
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .logout-btn {
+    background: var(--color-gray-600);
+  }
+
+  .logout-btn:hover {
+    background: var(--color-gray-700);
+  }
+</style>
+
+<script>
+  // Get elements
+  const userNameDisplay = document.getElementById('user-name')
+  const userEmailDisplay = document.getElementById('user-email')
+  const userPhoneDisplay = document.getElementById('user-phone')
+  const userRoleDisplay = document.getElementById('user-role')
+  
+  const userNameInput = document.getElementById('user-name-input') as HTMLInputElement
+  const userEmailInput = document.getElementById('user-email-input') as HTMLInputElement
+  const userPhoneInput = document.getElementById('user-phone-input') as HTMLInputElement
+  
+  const logoutBtn = document.getElementById('logout-btn')
+  const editBtn = document.getElementById('edit-profile-btn')
+  const saveBtn = document.getElementById('save-profile-btn')
+  const cancelBtn = document.getElementById('cancel-edit-btn')
+  const passwordForm = document.getElementById('password-form') as HTMLFormElement
+  const passwordError = document.getElementById('password-error')
+  const deleteForm = document.getElementById('delete-form') as HTMLFormElement
+  const deleteError = document.getElementById('delete-error')
+
+  // Get user from localStorage
+  function getStoredUser() {
+    const stored = localStorage.getItem('auth_user')
+    if (stored) {
+      try {
+        return JSON.parse(stored)
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  // Load user data
+  function loadUserData() {
+    const user = getStoredUser()
+    if (user && user.email) {
+      if (userNameDisplay) userNameDisplay.textContent = user.nombre || ''
+      if (userEmailDisplay) userEmailDisplay.textContent = user.email || ''
+      if (userPhoneDisplay) userPhoneDisplay.textContent = user.telefono || ''
+      if (userRoleDisplay) userRoleDisplay.textContent = user.role || 'Cliente'
+    } else {
+      window.location.href = '/account/login'
+    }
+  }
+
+  // Toggle edit mode
+  function setEditMode(editing: boolean) {
+    if (editing) {
+      userNameDisplay?.classList.add('hidden')
+      userEmailDisplay?.classList.add('hidden')
+      userPhoneDisplay?.classList.add('hidden')
+      
+      userNameInput?.classList.add('active')
+      userEmailInput?.classList.add('active')
+      userPhoneInput?.classList.add('active')
+      
+      const user = getStoredUser()
+      if (user) {
+        if (userNameInput) userNameInput.value = user.nombre || ''
+        if (userEmailInput) userEmailInput.value = user.email || ''
+        if (userPhoneInput) userPhoneInput.value = user.telefono || ''
+      }
+      
+      editBtn?.classList.add('saving')
+      saveBtn?.classList.add('active')
+      cancelBtn?.classList.add('active')
+    } else {
+      userNameDisplay?.classList.remove('hidden')
+      userEmailDisplay?.classList.remove('hidden')
+      userPhoneDisplay?.classList.remove('hidden')
+      
+      userNameInput?.classList.remove('active')
+      userEmailInput?.classList.remove('active')
+      userPhoneInput?.classList.remove('active')
+      
+      editBtn?.classList.remove('saving')
+      saveBtn?.classList.remove('active')
+      cancelBtn?.classList.remove('active')
+    }
+  }
+
+  // Event listeners
+  editBtn?.addEventListener('click', () => setEditMode(true))
+  cancelBtn?.addEventListener('click', () => setEditMode(false))
+
+  // Logout
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('auth_user')
+    window.location.href = '/'
+  })
+
+  // Save profile
+  saveBtn?.addEventListener('click', async () => {
+    const nombre = userNameInput?.value || ''
+    const email = userEmailInput?.value || ''
+    const telefono = userPhoneInput?.value || ''
+
+    try {
+      const res = await fetch('/api/auth/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, telefono })
+      })
+      
+      const data = await res.json()
+      
+      if (data.success) {
+        alert('Profilo aggiornato!')
+        
+        const stored = localStorage.getItem('auth_user')
+        if (stored) {
+          const user = JSON.parse(stored)
+          user.nombre = nombre
+          user.email = email
+          user.telefono = telefono
+          localStorage.setItem('auth_user', JSON.stringify(user))
+        }
+        
+        loadUserData()
+        setEditMode(false)
+      } else {
+        alert(data.message || 'Errore')
+      }
+    } catch (err) {
+      alert('Errore di connessione')
+    }
+  })
+
+  // Password change
+  passwordForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const formData = new FormData(passwordForm)
+    const currentPassword = formData.get('currentPassword') as string
+    const newPassword = formData.get('newPassword') as string
+    const confirmPassword = formData.get('confirmPassword') as string
+
+    if (newPassword !== confirmPassword) {
+      if (passwordError) passwordError.textContent = 'Le password non corrispondono'
+      return
+    }
+
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
+      })
+      
+      const data = await res.json()
+      
+      if (data.success) {
+        alert('Password cambiata con successo!')
+        passwordForm.reset()
+      } else {
+        if (passwordError) passwordError.textContent = data.message
+      }
+    } catch (err) {
+      if (passwordError) passwordError.textContent = 'Errore di connessione'
+    }
+  })
+
+  // Delete account
+  deleteForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    
+    if (!confirm('Sei sicuro? Questa azione è irreversibile!')) return
+    
+    const formData = new FormData(deleteForm)
+    const confirmDelete = formData.get('confirmDelete') as string
+
+    try {
+      const res = await fetch('/api/auth/delete-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmDelete })
+      })
+      
+      const data = await res.json()
+      
+      if (data.success) {
+        alert('Account eliminato!')
+        window.location.href = '/'
+      } else {
+        if (deleteError) deleteError.textContent = data.message
+      }
+    } catch (err) {
+      if (deleteError) deleteError.textContent = 'Errore di connessione'
+    }
+  })
+
+  // Initialize
+  loadUserData()
+</script>

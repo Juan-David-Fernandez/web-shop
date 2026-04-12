@@ -1,57 +1,93 @@
 /**
- * Authentication store for managing user session
+ * Authentication store for user sessions
+ * Supports Cliente (SQLite), Owner and Staff (.env)
  */
 
-import { writable, derived } from 'nanostores'
-import type { User } from '../types/auth'
+import { atom, computed } from 'nanostores'
+import type { User, AuthResponse } from '../types/auth'
 
-// Core store
-export const authStore = writable<User | null>(null)
+// Core store (atom replaces writable in nanostores 1.x)
+export const authStore = atom<User | null>(null)
 
 // Derived stores
-export const isAuthenticatedStore = derived(authStore, $auth => $auth !== null)
-export const isAdminStore = derived(authStore, $auth => $auth?.role === 'admin')
-export const isEmployeeStore = derived(authStore, $auth =>
-  $auth?.role === 'admin' || $auth?.role === 'employee'
-)
-
-// Mock users for development (in production, these would come from a real auth service)
-const MOCK_USERS: Record<string, User> = {
-  'admin@lasalumeria.it': {
-    id: '1',
-    email: 'admin@lasalumeria.it',
-    role: 'admin',
-    token: 'mock-jwt-admin-token'
-  },
-  'employee@lasalumeria.it': {
-    id: '2',
-    email: 'employee@lasalumeria.it',
-    role: 'employee',
-    token: 'mock-jwt-employee-token'
-  }
-}
+export const isAuthenticatedStore = computed(authStore, $auth => $auth !== null)
+export const isAdminStore = computed(authStore, $auth => $auth?.role === 'Owner' || $auth?.role === 'Staff')
+export const isOwnerStore = computed(authStore, $auth => $auth?.role === 'Owner')
+export const isStaffStore = computed(authStore, $auth => $auth?.role === 'Staff')
+export const isClienteStore = computed(authStore, $auth => $auth?.role === 'Cliente')
 
 /**
  * Login with email and password
- * In production, this would make a real API call
+ * Checks Owner/Staff against .env first, then Cliente against SQLite
  */
-export async function login(email: string, password: string): Promise<{ success: boolean; message: string }> {
-  // Mock authentication - in production, this would call a real auth endpoint
-  const user = MOCK_USERS[email]
+export async function login(
+  email: string, 
+  password: string
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+      credentials: 'same-origin'
+    })
 
-  if (user && password === 'demo123') {
-    authStore.set(user)
-    return { success: true, message: 'Login successful' }
+    const data: AuthResponse = await response.json()
+
+    if (data.success && data.user) {
+      authStore.set(data.user)
+      persistAuth(data.user)
+      return { success: true, message: data.message || 'Login successful' }
+    }
+
+    return { success: false, message: data.message || 'Login failed' }
+  } catch (error) {
+    console.error('Login error:', error)
+    return { success: false, message: 'Errore di connessione' }
   }
-
-  return { success: false, message: 'Credenziali non valide' }
 }
 
 /**
  * Logout the current user
  */
-export function logout(): void {
-  authStore.set(null)
+export async function logout(): Promise<void> {
+  try {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'same-origin'
+    })
+  } catch (error) {
+    console.error('Logout error:', error)
+  } finally {
+    authStore.set(null)
+    clearAuth()
+  }
+}
+
+/**
+ * Get current session from server
+ */
+export async function getSession(): Promise<User | null> {
+  try {
+    const response = await fetch('/api/auth/session', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+
+    if (!response.ok) return null
+
+    const data: AuthResponse = await response.json()
+    
+    if (data.success && data.user) {
+      authStore.set(data.user)
+      return data.user
+    }
+
+    return null
+  } catch (error) {
+    console.error('Get session error:', error)
+    return null
+  }
 }
 
 /**
@@ -62,18 +98,39 @@ export function isAuthenticated(): boolean {
 }
 
 /**
- * Check if user is admin
+ * Get current auth user
  */
-export function isAdmin(): boolean {
-  return authStore.get()?.role === 'admin'
+export function getAuth(): User | null {
+  return authStore.get()
 }
 
 /**
- * Check if user is employee (admin or employee role)
+ * Check if user is admin (Owner or Staff)
  */
-export function isEmployee(): boolean {
+export function isAdmin(): boolean {
   const user = authStore.get()
-  return user?.role === 'admin' || user?.role === 'employee'
+  return user?.role === 'Owner' || user?.role === 'Staff'
+}
+
+/**
+ * Check if user is Owner
+ */
+export function isOwner(): boolean {
+  return authStore.get()?.role === 'Owner'
+}
+
+/**
+ * Check if user is Staff
+ */
+export function isStaff(): boolean {
+  return authStore.get()?.role === 'Staff'
+}
+
+/**
+ * Check if user is Cliente
+ */
+export function isCliente(): boolean {
+  return authStore.get()?.role === 'Cliente'
 }
 
 /**
@@ -84,12 +141,10 @@ export function getCurrentUser(): User | null {
 }
 
 /**
- * Initialize auth from stored session (e.g., localStorage)
+ * Initialize auth from stored session
  * Call this on app initialization
  */
 export function initAuth(): void {
-  // In a real app, we'd check localStorage or session storage for a persisted token
-  // and validate it with the server. For now, we start unauthenticated.
   const stored = localStorage.getItem('auth_user')
   if (stored) {
     try {
@@ -102,7 +157,7 @@ export function initAuth(): void {
 }
 
 /**
- * Persist auth state to storage
+ * Persist auth state to localStorage
  */
 export function persistAuth(user: User): void {
   localStorage.setItem('auth_user', JSON.stringify(user))

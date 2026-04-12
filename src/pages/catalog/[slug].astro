@@ -1,7 +1,10 @@
 ---
 /**
  * Product Detail Page - Individual product page with gallery and related products
+ * Uses static prerendering to generate all product pages at build
  */
+export const prerender = true
+
 import Layout from '../../layouts/Layout.astro'
 import ProductDetail from '../../components/catalog/ProductDetail.astro'
 

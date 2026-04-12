@@ -1,0 +1,490 @@
+---
+/**
+ * Registration Page - Public registration for Cliente role
+ * Spec: user-registration
+ */
+import Layout from '../../layouts/Layout.astro'
+---
+
+<Layout title="Registrati - La Salumeria Silvio">
+  <div class="register-page">
+    <div class="register-container">
+      <div class="register-header">
+        <h1 class="register-title">Crea il tuo account</h1>
+        <p class="register-subtitle">
+          Registrati per vedere i tuoi ordini, gestire gli indirizzi e molto altro
+        </p>
+      </div>
+
+      <form id="register-form" class="register-form" novalidate>
+        <div class="form-field">
+          <label for="email" class="field-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="field-input"
+            placeholder="email@esempio.com"
+            required
+            autocomplete="email"
+          />
+          <span class="field-error" id="email-error"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="password" class="field-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="field-input"
+            placeholder="••••••••"
+            required
+            autocomplete="new-password"
+          />
+          <div class="password-requirements" id="password-requirements">
+            <p>La password deve avere:</p>
+            <ul>
+              <li id="req-length">Almeno 8 caratteri</li>
+              <li id="req-upper">Una lettera maiuscola</li>
+              <li id="req-number">Un numero</li>
+            </ul>
+          </div>
+          <span class="field-error" id="password-error"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="nombre" class="field-label">Nome completo</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            class="field-input"
+            placeholder="Mario Rossi"
+            required
+            autocomplete="name"
+          />
+          <span class="field-error" id="nombre-error"></span>
+        </div>
+
+        <div class="form-field">
+          <label for="telefono" class="field-label">Telefono (opzionale)</label>
+          <input
+            type="tel"
+            id="telefono"
+            name="telefono"
+            class="field-input"
+            placeholder="+54 9 11 1234 5678"
+            autocomplete="tel"
+          />
+          <span class="field-hint">Formato argentino: +54 9 11 xxxx xxxx</span>
+        </div>
+
+        <div class="form-error" id="form-error" role="alert" style="display: none;">
+          <p class="error-text"></p>
+        </div>
+
+        <button type="submit" class="register-button" id="submit-btn" disabled>
+          Registrati
+        </button>
+      </form>
+
+      <div class="register-footer">
+        <p>
+          Hai già un account?
+          <a href="/account/login" class="login-link">Accedi</a>
+        </p>
+        <a href="/" class="back-link">← Torna alla home</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .register-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    background: var(--color-cream);
+  }
+
+  .register-container {
+    width: 100%;
+    max-width: 480px;
+    padding: var(--spacing-2xl);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .register-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .register-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--spacing-xs) 0;
+  }
+
+  .register-subtitle {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .field-label {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gray-700);
+  }
+
+  .field-input {
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-900);
+    background: var(--color-white);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--color-brown);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+  }
+
+  .field-input::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  .field-input.error {
+    border-color: var(--color-error);
+  }
+
+  .field-error {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-error);
+    min-height: 1.4em;
+  }
+
+  .field-hint {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
+  }
+
+  .password-requirements {
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
+    padding: var(--spacing-sm);
+    background: var(--color-cream-light);
+    border-radius: var(--radius-md);
+  }
+
+  .password-requirements p {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-weight: 500;
+  }
+
+  .password-requirements ul {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+    list-style: none;
+  }
+
+  .password-requirements li {
+    position: relative;
+    padding-left: var(--spacing-lg);
+  }
+
+  .password-requirements li::before {
+    content: '○';
+    position: absolute;
+    left: 0;
+    color: var(--color-gray-400);
+  }
+
+  .password-requirements li.valid::before {
+    content: '✓';
+    color: var(--color-success);
+  }
+
+  .form-error {
+    padding: var(--spacing-md);
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-error);
+  }
+
+  .error-text {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-error);
+    margin: 0;
+  }
+
+  .register-button {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-brown);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background var(--transition-fast), opacity var(--transition-fast);
+    margin-top: var(--spacing-sm);
+  }
+
+  .register-button:hover:not(:disabled) {
+    background: var(--color-brown-dark);
+  }
+
+  .register-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .register-footer {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .register-footer p {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .login-link {
+    color: var(--color-brown);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .login-link:hover {
+    text-decoration: underline;
+  }
+
+  .back-link {
+    font-family: var(--font-secondary);
+    font-size: var(--text-base);
+    color: var(--color-brown);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-brown-dark);
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  import { login } from '../../stores/authStore'
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('register-form') as HTMLFormElement
+    const emailInput = document.getElementById('email') as HTMLInputElement
+    const passwordInput = document.getElementById('password') as HTMLInputElement
+    const nombreInput = document.getElementById('nombre') as HTMLInputElement
+    const telefonoInput = document.getElementById('telefono') as HTMLInputElement
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement
+    const formError = document.getElementById('form-error')
+
+    // Password requirement elements
+    const reqLength = document.getElementById('req-length')
+    const reqUpper = document.getElementById('req-upper')
+    const reqNumber = document.getElementById('req-number')
+
+    // Validation functions
+    function isValidEmail(email: string): boolean {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
+    }
+
+    function validatePassword(password: string): {
+      valid: boolean
+      hasLength: boolean
+      hasUpper: boolean
+      hasNumber: boolean
+    } {
+      const hasLength = password.length >= 8
+      const hasUpper = /[A-Z]/.test(password)
+      const hasNumber = /[0-9]/.test(password)
+
+      return {
+        valid: hasLength && hasUpper && hasNumber,
+        hasLength,
+        hasUpper,
+        hasNumber
+      }
+    }
+
+    function updatePasswordRequirements(password: string): void {
+      const validation = validatePassword(password)
+
+      if (reqLength) {
+        reqLength.classList.toggle('valid', validation.hasLength)
+      }
+      if (reqUpper) {
+        reqUpper.classList.toggle('valid', validation.hasUpper)
+      }
+      if (reqNumber) {
+        reqNumber.classList.toggle('valid', validation.hasNumber)
+      }
+
+      updateSubmitButton()
+    }
+
+    function updateSubmitButton(): void {
+      const email = emailInput?.value.trim()
+      const password = passwordInput?.value
+      const nombre = nombreInput?.value.trim()
+
+      const isEmailValid = email ? isValidEmail(email) : false
+      const isPasswordValid = password ? validatePassword(password).valid : false
+      const isNombreValid = nombre ? nombre.length > 0 : false
+
+      if (submitBtn) {
+        submitBtn.disabled = !isEmailValid || !isPasswordValid || !isNombreValid
+      }
+    }
+
+    // Real-time validation
+    emailInput?.addEventListener('blur', () => {
+      const email = emailInput.value.trim()
+      const errorSpan = document.getElementById('email-error')
+
+      if (email && !isValidEmail(email)) {
+        emailInput.classList.add('error')
+        if (errorSpan) errorSpan.textContent = 'Ingresa un email válido'
+      } else {
+        emailInput.classList.remove('error')
+        if (errorSpan) errorSpan.textContent = ''
+      }
+    })
+
+    passwordInput?.addEventListener('input', () => {
+      updatePasswordRequirements(passwordInput.value)
+    })
+
+    nombreInput?.addEventListener('input', () => {
+      updateSubmitButton()
+    })
+
+    // Show error
+    function showError(message: string) {
+      if (formError) {
+        const errorText = formError.querySelector('.error-text')
+        if (errorText) errorText.textContent = message
+        formError.style.display = 'block'
+      }
+    }
+
+    function hideError() {
+      if (formError) {
+        formError.style.display = 'none'
+      }
+    }
+
+    // Handle form submission
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      hideError()
+
+      const email = emailInput?.value.trim()
+      const password = passwordInput?.value
+      const nombre = nombreInput?.value.trim()
+      const telefono = telefonoInput?.value.trim()
+
+      // Server-side validation
+      if (!email || !isValidEmail(email)) {
+        showError('Ingresa un email válido')
+        emailInput?.focus()
+        return
+      }
+
+      const passwordValidation = validatePassword(password || '')
+      if (!passwordValidation.valid) {
+        showError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número')
+        passwordInput?.focus()
+        return
+      }
+
+      if (!nombre) {
+        showError('El nombre es requerido')
+        nombreInput?.focus()
+        return
+      }
+
+      // Disable button during submission
+      if (submitBtn) {
+        submitBtn.disabled = true
+        submitBtn.textContent = 'Registrando...'
+      }
+
+      try {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, nombre, telefono })
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          // Auto-login after registration
+          const loginResult = await login(email, password)
+          
+          if (loginResult.success) {
+            // Redirect to profile (AR-002)
+            window.location.href = '/account/profile'
+          } else {
+            // If auto-login fails, redirect to login page
+            window.location.href = '/account/login'
+          }
+        } else {
+          showError(data.message || 'Error durante el registro')
+        }
+      } catch (error) {
+        console.error('Registration error:', error)
+        showError('Error de conexión. Intenta más tarde.')
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false
+          submitBtn.textContent = 'Registrati'
+        }
+      }
+    })
+  })
+</script>
